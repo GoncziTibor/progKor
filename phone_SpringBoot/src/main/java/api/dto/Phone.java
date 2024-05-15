@@ -14,7 +14,7 @@ public class Phone {
         this.operatingSystem = operatingSystem;
         this.releaseYear = releaseYear;
     }
-    
+
     public String getBrand() {
         return brand;
     }
@@ -53,6 +53,17 @@ public class Phone {
 
     public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
+    }
+
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", price=" + price +
+                ", operatingSystem='" + operatingSystem + '\'' +
+                ", releaseYear=" + releaseYear +
+                '}';
     }
 }
 
