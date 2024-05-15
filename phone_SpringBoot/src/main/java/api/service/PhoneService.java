@@ -2,6 +2,7 @@ package api.service;
 
 import api.dto.Phone;
 import api.entity.PhoneEntity;
+import api.exception.PhoneException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,11 @@ public class PhoneService {
     }
 
     public PhoneEntity getPhoneById(Long id) {
-        return phoneMap.get(id);
+        PhoneEntity phoneEntity = phoneMap.get(id);
+        if (phoneEntity == null) {
+            throw new PhoneException("Phone not found with id: " + id);
+        }
+        return phoneEntity;
     }
 
     public PhoneEntity addPhone(Phone phone) {
@@ -45,7 +50,7 @@ public class PhoneService {
             phoneEntity.setReleaseYear(phone.getReleaseYear());
             return phoneEntity;
         } else {
-            return null;
+            throw new PhoneException("Phone not found with id: " + id);
         }
     }
 
@@ -53,4 +58,3 @@ public class PhoneService {
         phoneMap.remove(id);
     }
 }
-
