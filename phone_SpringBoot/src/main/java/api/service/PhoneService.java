@@ -3,58 +3,56 @@ package api.service;
 import api.dto.Phone;
 import api.entity.PhoneEntity;
 import api.exception.PhoneException;
+import api.repository.PhoneRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PhoneService {
 
-    private final Map<Long, PhoneEntity> phoneMap = new HashMap<>();
-    private long nextId = 1;
+    private final PhoneRepository phoneRepository;
+
+    @Autowired
+    public PhoneService(PhoneRepository phoneRepository) {
+        this.phoneRepository = phoneRepository;
+    }
 
     public List<PhoneEntity> getAllPhones() {
-        return new ArrayList<>(phoneMap.values());
+        return phoneRepository.findAll();
     }
 
     public PhoneEntity getPhoneById(Long id) {
-        PhoneEntity phoneEntity = phoneMap.get(id);
-        if (phoneEntity == null) {
-            throw new PhoneException("Phone not found with id: " + id);
-        }
-        return phoneEntity;
+        return phoneRepository.findById(id)
+                .orElseThrow(() -> new PhoneException(id));
     }
 
     public PhoneEntity addPhone(Phone phone) {
         PhoneEntity phoneEntity = new PhoneEntity();
-        phoneEntity.setId(nextId++);
         phoneEntity.setBrand(phone.getBrand());
         phoneEntity.setModel(phone.getModel());
         phoneEntity.setPrice(phone.getPrice());
         phoneEntity.setOperatingSystem(phone.getOperatingSystem());
         phoneEntity.setReleaseYear(phone.getReleaseYear());
-        phoneMap.put(phoneEntity.getId(), phoneEntity);
-        return phoneEntity;
+        return phoneRepository.save(phoneEntity);
     }
 
     public PhoneEntity updatePhone(Long id, Phone phone) {
-        if (phoneMap.containsKey(id)) {
-            PhoneEntity phoneEntity = phoneMap.get(id);
-            phoneEntity.setBrand(phone.getBrand());
-            phoneEntity.setModel(phone.getModel());
-            phoneEntity.setPrice(phone.getPrice());
-            phoneEntity.setOperatingSystem(phone.getOperatingSystem());
-            phoneEntity.setReleaseYear(phone.getReleaseYear());
-            return phoneEntity;
-        } else {
-            throw new PhoneException("Phone not found with id: " + id);
-        }
+        PhoneEntity phoneEntity = phoneRepository.findById(id)
+                .orElseThrow(() -> new PhoneException(id));
+        phoneEntity.setBrand(phone.getBrand());
+        phoneEntity.setModel(phone.getModel());
+        phoneEntity.setPrice(phone.getPrice());
+        phoneEntity.setOperatingSystem(phone.getOperatingSystem());
+        phoneEntity.setReleaseYear(phone.getReleaseYear());
+        return phoneRepository.save(phoneEntity);
     }
 
     public void deletePhone(Long id) {
-        phoneMap.remove(id);
+        if (!phoneRepository.existsById(id)) {
+            throw new PhoneException(id);
+        }
+        phoneRepository.deleteById(id);
     }
 }
