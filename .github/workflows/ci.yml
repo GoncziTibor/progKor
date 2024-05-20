@@ -17,3 +17,6 @@ jobs:
           java-version: '17'
       - name: Compile PhoneAppApplication
         run: mvn compile
+      - name: Test PhoneAppApplication
+        run: mvn test
+        
