@@ -43,7 +43,6 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -52,20 +51,17 @@
 				</configuration>
 			</plugin>
 
-			<!-- Jacoco Maven Plugin -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.7</version>
 				<executions>
-					<!-- Attach Jacoco agent during the test phase -->
 					<execution>
 						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<!-- Generate Jacoco report after tests have run -->
 					<execution>
 						<id>report</id>
 						<phase>prepare-package</phase>
@@ -73,7 +69,6 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
-					<!-- Check Jacoco coverage rules -->
 					<execution>
 						<id>check</id>
 						<goals>
