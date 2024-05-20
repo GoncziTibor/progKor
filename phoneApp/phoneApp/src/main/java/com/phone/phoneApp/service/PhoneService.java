@@ -33,14 +33,4 @@ public class PhoneService implements com.phone.phoneApp.service.Service {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-
-    @Override
-    public void deletePhone(Integer id) {
-        phoneRepository.deleteById(id);
-    }
-
-    @Override
-    public Phone updatePhone(Phone phone) {
-        return phoneRepository.save(phone);
-    }
 }
