@@ -10,4 +10,8 @@ public interface Service {
     public List<Phone> allPhone();
 
     public Phone getPhoneId(Integer id);
+
+    public void deletePhone(Integer id);
+
+    public Phone updatePhone(Phone phone);
 }

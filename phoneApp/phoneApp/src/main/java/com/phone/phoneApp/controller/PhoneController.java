@@ -28,5 +28,14 @@ public class PhoneController {
         return phoneService.getPhoneId(id);
     }
 
+    @DeleteMapping("/del/{id}")
+    public void deletePhone(@PathVariable Integer id){
+        phoneService.deletePhone(id);
+    }
+
+    @PutMapping("/update")
+    public Phone updatePhone(@RequestBody Phone phone){
+        return phoneService.updatePhone(phone);
+    }
 
 }
