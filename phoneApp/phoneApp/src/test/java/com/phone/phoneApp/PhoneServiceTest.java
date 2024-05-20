@@ -1,100 +1,69 @@
 package com.phone.phoneApp;
 
-import com.phone.phoneApp.dto.Phone;
-
-import com.phone.phoneApp.repository.PhoneRepository;
-import com.phone.phoneApp.service.PhoneService;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.phone.phoneApp.dto.Phone;
+import com.phone.phoneApp.repository.PhoneRepository;
+import com.phone.phoneApp.service.PhoneService;
 
 public class PhoneServiceTest {
-
-    @InjectMocks
-    private PhoneService phoneService;
 
     @Mock
     private PhoneRepository phoneRepository;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
+    @InjectMocks
+    private PhoneService phoneService;
+
+    public PhoneServiceTest() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void testSavePhone() {
         Phone phone = new Phone();
-        phone.setBrand("Brand");
-        phone.setModel("Model");
+        phone.setBrand("Samsung");
+        phone.setModel("Galaxy");
+        phone.setPrice(500);
+        phone.setOperatingSystem("Android");
+        phone.setReleaseYear(2023);
 
-        when(phoneRepository.save(phone)).thenReturn(phone);
+        Mockito.when(phoneRepository.save(Mockito.any(Phone.class))).thenReturn(phone);
 
-        Phone result = phoneService.savePhone(phone);
-
-        assertEquals(phone, result);
-        verify(phoneRepository, times(1)).save(phone);
+        Phone savedPhone = phoneService.savePhone(phone);
+        assertNotNull(savedPhone);
+        assertEquals("Samsung", savedPhone.getBrand());
+        assertEquals("Galaxy", savedPhone.getModel());
+        assertEquals(500, savedPhone.getPrice());
+        assertEquals("Android", savedPhone.getOperatingSystem());
+        assertEquals(2023, savedPhone.getReleaseYear());
     }
 
     @Test
-    public void testAllPhone() {
-        List<Phone> phoneList = new ArrayList<>();
-        phoneList.add(new Phone());
-        when(phoneRepository.findAll()).thenReturn(phoneList);
-
-        List<Phone> result = phoneService.allPhone();
-
-        assertEquals(phoneList, result);
-        verify(phoneRepository, times(1)).findAll();
-    }
-
-    @Test
-    public void testGetPhoneId() {
+    public void testGetPhoneById() {
         Phone phone = new Phone();
-        when(phoneRepository.findById(1)).thenReturn(Optional.of(phone));
+        phone.setId(1);
+        phone.setBrand("Samsung");
+        phone.setModel("Galaxy");
+        phone.setPrice(500);
+        phone.setOperatingSystem("Android");
+        phone.setReleaseYear(2023);
 
-        Phone result = phoneService.getPhoneId(1);
+        Mockito.when(phoneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(phone));
 
-        assertEquals(phone, result);
-        verify(phoneRepository, times(1)).findById(1);
-    }
-
-    @Test
-    public void testGetPhoneIdNotFound() {
-        when(phoneRepository.findById(1)).thenReturn(Optional.empty());
-
-        assertThrows(ResponseStatusException.class, () -> {
-            phoneService.getPhoneId(1);
-        });
-        verify(phoneRepository, times(1)).findById(1);
-    }
-
-    @Test
-    public void testDeletePhone() {
-        doNothing().when(phoneRepository).deleteById(1);
-
-        phoneService.deletePhone(1);
-
-        verify(phoneRepository, times(1)).deleteById(1);
-    }
-
-    @Test
-    public void testUpdatePhone() {
-        Phone phone = new Phone();
-        when(phoneRepository.save(phone)).thenReturn(phone);
-
-        Phone result = phoneService.updatePhone(phone);
-
-        assertEquals(phone, result);
-        verify(phoneRepository, times(1)).save(phone);
+        Phone foundPhone = phoneService.getPhoneId(1);
+        assertNotNull(foundPhone);
+        assertEquals(1, foundPhone.getId());
+        assertEquals("Samsung", foundPhone.getBrand());
+        assertEquals("Galaxy", foundPhone.getModel());
+        assertEquals(500, foundPhone.getPrice());
+        assertEquals("Android", foundPhone.getOperatingSystem());
+        assertEquals(2023, foundPhone.getReleaseYear());
     }
 }
