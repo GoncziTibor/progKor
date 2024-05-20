@@ -12,7 +12,7 @@ public class Phone {
     private int id;
     private String brand;
     private String model;
-    private double price;
+    private int price;
     private String operatingSystem;
     private int releaseYear;
 
@@ -47,7 +47,7 @@ public class Phone {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

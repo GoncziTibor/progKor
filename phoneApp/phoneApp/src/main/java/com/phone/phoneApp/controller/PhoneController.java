@@ -23,6 +23,10 @@ public class PhoneController {
         return phoneService.allPhone();
     }
 
+    @GetMapping("/get/{id}")
+    public Phone getPhone(@PathVariable Integer id){
+        return phoneService.getPhoneId(id);
+    }
 
 
 }

@@ -8,4 +8,6 @@ public interface Service {
     public Phone savePhone(Phone phone);
 
     public List<Phone> allPhone();
+
+    public Phone getPhoneId(Integer id);
 }
