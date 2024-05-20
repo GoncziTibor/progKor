@@ -37,8 +37,10 @@ public class PhoneControllerTest {
 
     @Test
     public void testGetPhones() throws Exception {
+        // Arrange
         when(phoneService.allPhone()).thenReturn(Arrays.asList(new Phone()));
 
+        // Act & Assert
         mockMvc.perform(get("/phones/getAll"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
@@ -48,10 +50,12 @@ public class PhoneControllerTest {
 
     @Test
     public void testGetPhone() throws Exception {
+        // Arrange
         Phone phone = new Phone();
         phone.setId(1);
         when(phoneService.getPhoneId(1)).thenReturn(phone);
 
+        // Act & Assert
         mockMvc.perform(get("/phones/get/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1));
@@ -61,11 +65,13 @@ public class PhoneControllerTest {
 
     @Test
     public void testAddPhone() throws Exception {
+        // Arrange
         Phone phone = new Phone();
         phone.setId(1);
         phone.setBrand("Brand");
         when(phoneService.savePhone(any(Phone.class))).thenReturn(phone);
 
+        // Act & Assert
         mockMvc.perform(post("/phones/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(phone)))
@@ -78,8 +84,10 @@ public class PhoneControllerTest {
 
     @Test
     public void testDeletePhone() throws Exception {
+        // Arrange
         doNothing().when(phoneService).deletePhone(1);
 
+        // Act & Assert
         mockMvc.perform(delete("/phones/del/1"))
                 .andExpect(status().isOk());
 
@@ -88,11 +96,13 @@ public class PhoneControllerTest {
 
     @Test
     public void testUpdatePhone() throws Exception {
+        // Arrange
         Phone phone = new Phone();
         phone.setId(1);
         phone.setBrand("Brand");
         when(phoneService.updatePhone(any(Phone.class))).thenReturn(phone);
 
+        // Act & Assert
         mockMvc.perform(put("/phones/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(phone)))
@@ -103,4 +113,3 @@ public class PhoneControllerTest {
         verify(phoneService, times(1)).updatePhone(any(Phone.class));
     }
 }
-
